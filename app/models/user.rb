@@ -3,7 +3,10 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :omniauthable,
          :recoverable, :rememberable, :trackable, :validatable
-  
+
+  has_many :user_races
+  has_many :races, through: :user_races
+    
 
   def self.koala(auth)
     access_token = auth['token']

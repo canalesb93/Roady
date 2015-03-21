@@ -1,9 +1,8 @@
-class CreateRaces < ActiveRecord::Migration
+class CreateUserRaces < ActiveRecord::Migration
   def change
-    create_table :races do |t|
-      t.string :name
-      t.string :map_id
-      t.integer :user_races_id
+    create_table :user_races do |t|
+      t.integer :user_id
+      t.integer :race_id
       t.decimal :lat, {:precision=>10, :scale=>7}
       t.decimal :lng, {:precision=>10, :scale=>7}
       t.timestamps

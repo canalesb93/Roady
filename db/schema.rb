@@ -11,11 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150321213550) do
+ActiveRecord::Schema.define(version: 20150321214834) do
 
   create_table "races", force: true do |t|
     t.string   "name"
     t.string   "map_id"
+    t.integer  "user_races_id"
+    t.decimal  "lat",           precision: 10, scale: 7
+    t.decimal  "lng",           precision: 10, scale: 7
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_races", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "race_id"
     t.decimal  "lat",        precision: 10, scale: 7
     t.decimal  "lng",        precision: 10, scale: 7
     t.datetime "created_at"

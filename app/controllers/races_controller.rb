@@ -42,6 +42,6 @@ class RacesController < ApplicationController
     end
 
     def race_params
-      params.require(:race).permit(:name, :map_id)
+      params.require(:race).permit(:name, :map_id, :lat, :lng)
     end
 end
