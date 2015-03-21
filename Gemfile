@@ -12,6 +12,9 @@ gem 'spring',        group: :development
 gem 'devise'
 gem 'simple_form'
 gem 'thin'
+gem 'omniauth'
+gem 'omniauth-facebook' # Facebook authentication
+gem "koala", "~> 1.10.0rc" # Facebook API
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]
