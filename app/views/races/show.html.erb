@@ -10,5 +10,13 @@
   <%= @race.map_id %>
 </p>
 
+<% @graph.get_connections("me", "friends").each do |friend| %>
+  <% user = User.find_by(uid: friend["id"]) %>
+  <% if user %>
+    <%= render partial: "invite_form", locals: { user: user } %>
+  <% end %>
+<% end %>
+
+
 <%= link_to 'Edit', edit_race_path(@race) %> |
 <%= link_to 'Back', races_path %>

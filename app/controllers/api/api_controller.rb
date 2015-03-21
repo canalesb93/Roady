@@ -1,10 +1,6 @@
 class API::APIController < ApplicationController
 
-  before_filter :basic_auth
-
-  def information
-    render template: "api/information"
-  end
+  # before_filter :basic_auth
 
   def basic_auth
     authenticate_or_request_with_http_basic do |username,password|
