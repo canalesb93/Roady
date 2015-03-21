@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
     user = User.where(:provider => auth.provider, :uid => auth.uid).first
     if user
+      user.access_token = auth.credentials.token
+      user.save
       return user
     else
       registered_user = User.where(:email => auth.info.email).first
@@ -25,6 +27,7 @@ class User < ActiveRecord::Base
                             uid:auth.uid,
                             email:auth.info.email,
                             password:Devise.friendly_token[0,20],
+                            access_token: auth.credentials.token,
                           )
       end    
     end

@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     unless @user == current_user
       redirect_to :back, :alert => "Access denied."
     end
+    @graph = Koala::Facebook::API.new(current_user.access_token)
   end
 
 end
