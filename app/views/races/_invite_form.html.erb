@@ -1,0 +1,6 @@
+<%= simple_form_for :invite, url: url_for(:action => 'invite_user', :controller => 'races'), method: :post, html: {}, remote: true do |f| %>
+  <%= f.error_notification %>
+  <%= user.name %>
+  <%= f.hidden_field :user_id, value: user.id %>
+  <%= f.button :submit, "Invite" %>
+<% end %>

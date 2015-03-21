@@ -1,11 +1,12 @@
-class RacesController < ApplicationController
+class API::RacesController < API::APIController
   before_action :set_race, only: [:show, :edit, :update, :destroy, :invite_user]
 
   respond_to :html
 
   def index
-    @races = Race.all
-    respond_with(@races)
+    # races = current_user.races
+    races = Race.all
+    render json: races, status: :ok
   end
 
   def show
