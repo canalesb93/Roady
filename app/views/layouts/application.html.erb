@@ -2,19 +2,20 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Friend Race" %></title>
+    <title>Roady</title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Friend Race" %>">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
+    <link href='http://fonts.googleapis.com/
+    css?family=Source+Sans+Pro:300,400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.5/animate.min.css'>
   </head>
   <body>
-    <header>
+    <!-- <header>
       <%= render 'layouts/navigation' %>
-    </header>
-    <main role="main">
+    </header> -->
       <%= render 'layouts/messages' %>
       <%= yield %>
-    </main>
   </body>
 </html>
