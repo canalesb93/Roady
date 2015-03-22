@@ -11,14 +11,17 @@ class API::RacesController < API::APIController
 
   def show
     @graph = Koala::Facebook::API.new(current_user.access_token)
-    respond_with(@race)
+    render json: @race, include: :users 
   end
 
   def invite_user
-    @race.user_races << UserRace.create(user_id: params[:invite][:user_id], race_id: @race.id)
+    # @user = User.find_for_facebook_oauth(request.env["omniauth.auth"])
+    # @race.user_races << UserRace.create(user_id: params[:user_id], race_id: @race.id)
     @race.save
-    respond_to do |format|
-      format.js
+    if @race.save
+      render json: @race, include: :users , status: :created, location: @race
+    else
+      render json: @race.errors, status: 422
     end
   end
 
@@ -33,18 +36,26 @@ class API::RacesController < API::APIController
   def create
     @race = Race.create(race_params)
     @race.user_races << UserRace.create(user_id: current_user.id, race_id: @race.id)
-    @race.save
-    respond_with(@race)
+
+    if @race.save
+      render json: @race, include: :users , status: :created, location: @race
+    else
+      render json: @race.errors, status: 422
+    end
   end
 
   def update
     @race.update(race_params)
-    respond_with(@race)
+    if @race.save
+      render json: @race, status: 200
+    else
+      render json: @race.errors, status: 422
+    end
   end
 
   def destroy
     @race.destroy
-    respond_with(@race)
+    head 204
   end
 
   private
@@ -56,7 +67,4 @@ class API::RacesController < API::APIController
       params.require(:race).permit(:name, :map_id, :lat, :lng)
     end
 
-    def user_race_params
-      params.require(:race).permit(:user_id)
-    end
 end
