@@ -18,9 +18,6 @@ class User < ActiveRecord::Base
     @graph = Koala::Facebook::API.new(access_token)
     profile = @graph.get_object("me")
     user = User.where(:provider => "facebook", :uid => profile["id"]).first
-    puts "====================================================================="  
-    puts user.name
-    puts "====================================================================="  
 
     if user
       user.access_token = access_token
