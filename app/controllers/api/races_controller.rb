@@ -58,7 +58,12 @@ class API::RacesController < API::APIController
   end
 
   def exit_race
-    current_user.user_races.where(finished: false).first.update(finished: true)
+    race = current_user.user_races.where(finished: false).first.try(:race)
+    if race
+      current_user.user_races.where(finished: false).first.update(finished: true)
+      milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id)
+      response = milebase.push("milestones", { name: current_user.name, message: "left the race." })
+    end
     head 204
   end
 

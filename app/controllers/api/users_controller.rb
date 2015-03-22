@@ -16,4 +16,14 @@ class API::UsersController < API::APIController
     render json: current_user.user_races.where(finished: false).first.try(:race), include: :users
   end
 
+  def accept_race
+    race = current_user.user_races.where(finished: false, accepted: false).first.try(:race)
+    if race
+      current_user.user_races.where(finished: false, accepted: false).first.update(accepted: true)
+      milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id)
+      response = milebase.push("milestones", { name: current_user.name, message: "joined the race." })
+    end
+
+    head 204
+  end
 end

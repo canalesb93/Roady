@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150322050617) do
+ActiveRecord::Schema.define(version: 20150322075004) do
 
   create_table "races", force: true do |t|
     t.string   "name"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20150322050617) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "finished",                            default: false
+    t.boolean  "accepted",                            default: false
   end
 
   create_table "users", force: true do |t|
