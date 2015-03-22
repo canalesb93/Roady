@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
 
   root to: 'visitors#index'
+  get 'feed', to: 'visitors#feed'
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
   resources :races
   post 'races/:id/invite', to: 'races#invite_user'
 
   
   namespace :api do
+    get 'races/feed', to: 'races#feed'
     resources :races
     post 'races/:id/invite', to: 'races#invite_user'
     get 'users/friends', to: 'users#friends'

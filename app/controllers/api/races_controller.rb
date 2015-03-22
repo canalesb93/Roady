@@ -8,6 +8,11 @@ class API::RacesController < API::APIController
     render json: races, status: :ok
   end
 
+  def feed
+    feeds = Milestone.order(created_at: :desc).limit(30)
+    render json: feeds, status: :ok
+  end
+
   def show
     render json: @race, include: :users 
   end
@@ -46,6 +51,9 @@ class API::RacesController < API::APIController
     response = userbase.set(current_user.uid, { lat: "0", lng: "0" })
     milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id)
     response = milebase.push("milestones", { name: current_user.name, message: "created the race." })
+
+    Milestone.create(message: "created the race", name: current_user.name, race_name: @race.name)
+
     if @race.save
       render json: @race, include: :users , status: :created, location: @race
     else
@@ -68,6 +76,9 @@ class API::RacesController < API::APIController
       current_user.user_races.where(finished: false).first.update(finished: true)
       milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id)
       response = milebase.push("milestones", { name: current_user.name, message: "left the race." })
+
+      Milestone.create(message: "left the race", name: current_user.name, race_name: @race.name)
+
     end
     head 204
   end

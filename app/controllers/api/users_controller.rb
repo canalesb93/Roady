@@ -28,6 +28,9 @@ class API::UsersController < API::APIController
       current_user.user_races.where(finished: false, accepted: false).first.update(accepted: true)
       milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id)
       response = milebase.push("milestones", { name: current_user.name, message: "joined the race." })
+
+      Milestone.create(message: "joined the race", name: current_user.name, race_name: @race.name)
+
     end
 
     head 204
