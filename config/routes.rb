@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :races
     post 'races/:id/invite', to: 'races#invite_user'
+    get 'users/friends', to: 'users#friends'
     
   end
 
