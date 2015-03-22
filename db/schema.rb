@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150322021930) do
+ActiveRecord::Schema.define(version: 20150322050617) do
 
   create_table "races", force: true do |t|
     t.string   "name"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20150322021930) do
     t.decimal  "lng",        precision: 10, scale: 7
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "finished",                            default: false
   end
 
   create_table "user_races", force: true do |t|
