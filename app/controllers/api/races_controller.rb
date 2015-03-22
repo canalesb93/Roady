@@ -57,6 +57,11 @@ class API::RacesController < API::APIController
     end
   end
 
+  def exit_race
+    Race.where(finished: false).first.update(finished: true)
+    head 204
+  end
+
   def destroy
     @race.destroy
     head 204

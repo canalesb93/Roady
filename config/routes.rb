@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     post 'races/:id/invite', to: 'races#invite_user'
     get 'users/friends', to: 'users#friends'
     get 'users/current_race', to: 'users#current_race'
+    post 'races/exit_race', to: 'races#exit_race'
     
   end
 
