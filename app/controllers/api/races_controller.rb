@@ -58,7 +58,7 @@ class API::RacesController < API::APIController
   end
 
   def exit_race
-    Race.where(finished: false).first.update(finished: true)
+    current_user.user_races.where(finished: false).first.update(finished: true)
     head 204
   end
 

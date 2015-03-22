@@ -13,7 +13,7 @@ class API::UsersController < API::APIController
   end
 
   def current_race
-    render json: current_user.races.where(finished: false).first
+    render json: current_user.user_races.where(finished: false).first.race, include: :users
   end
 
 end

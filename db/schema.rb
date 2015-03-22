@@ -20,7 +20,6 @@ ActiveRecord::Schema.define(version: 20150322050617) do
     t.decimal  "lng",        precision: 10, scale: 7
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "finished",                            default: false
   end
 
   create_table "user_races", force: true do |t|
@@ -30,6 +29,7 @@ ActiveRecord::Schema.define(version: 20150322050617) do
     t.decimal  "lng",        precision: 10, scale: 7
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "finished",                            default: false
   end
 
   create_table "users", force: true do |t|
