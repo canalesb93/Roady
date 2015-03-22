@@ -45,7 +45,6 @@ class API::UsersController < API::APIController
       response = milebase.push("milestones", { name: current_user.name, message: "joined the race." })
       Milestone.create(message: "joined the race", name: current_user.name, uid: current_user.uid, race_name: race.name)
     end
-
-    head 204
+    render json: { race: race, accepted: user_race.accepted, admin_uid: current_user.uid }, include: :users
   end
 end
