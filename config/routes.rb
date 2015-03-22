@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     get 'users/friends', to: 'users#friends'
     get 'users/buzz_race', to: 'users#buzz_race'
     get 'users/current_race', to: 'users#current_race'
+    get 'users/pebble_current_race', to: 'users#pebble_current_race'
     post 'users/accept_race', to: 'users#accept_race'
     post 'races/exit_race', to: 'races#exit_race'
     post 'races/arrive', to: 'races#arrive'

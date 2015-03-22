@@ -23,6 +23,19 @@ class API::UsersController < API::APIController
     end
   end
 
+
+  def pebble_current_race
+    user_race = current_user.user_races.where(finished: false).first
+    race = user_race.try(:race)
+    userbase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id+"/users/")
+    response = userbase.set(current_user.uid, { name: current_user.name, lat: "25.649231099999998", lng: "-100.289689", distance: "140 m" })
+    if race
+      render json: { race: race, accepted: user_race.accepted, admin_uid: current_user.uid }, include: :users
+    else
+      head 204
+    end
+  end
+
   def buzz_race
     race = current_user.user_races.where(finished: false).first.try(:race)
     race.users.each do |user|
