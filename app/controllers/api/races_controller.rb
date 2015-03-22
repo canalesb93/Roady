@@ -4,8 +4,7 @@ class API::RacesController < API::APIController
   respond_to :html
 
   def index
-    # races = current_user.races
-    races = Race.all
+    races = current_user.races
     render json: races, status: :ok
   end
 
@@ -15,7 +14,7 @@ class API::RacesController < API::APIController
   end
 
   def invite_user
-    @user = User.find_by(uid: params["id"])
+    @user = User.find_by(uid: params["uid"])
     @race.user_races << UserRace.create(user_id: @user.id, race_id: @race.id)
     @race.save
     if @race.save
