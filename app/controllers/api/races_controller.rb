@@ -27,14 +27,18 @@ class API::RacesController < API::APIController
     @race = Race.new
     respond_with(@race)
   end
-
   def edit
   end
 
   def create
     @race = Race.create(race_params)
-    @race.user_races << UserRace.create(user_id: current_user.id, race_id: @race.id)
-    response = firebase.push("races", { :name => race_params["name"] })
+    params["race"]["members"].each do |friend|
+      user = User.find_by(uid: friend["uid"])
+      if user
+        @race.user_races << UserRace.create(user_id: user.id, race_id: @race.id)
+      end
+    end
+    response = firebase.push("races", { name: race_params["name"] })
     @race.map_id = response.body["name"]
     if @race.save
       render json: @race, include: :users , status: :created, location: @race
