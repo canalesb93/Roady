@@ -39,10 +39,12 @@ class API::RacesController < API::APIController
     @race = Race.new(race_params)
     @race.user_races.new(user_id: current_user.id, race_id: @race.id, accepted: true)
     @race.admin_name = current_user.name
-    params["race"]["members"].each do |friend|
-      user = User.find_by(uid: friend["uid"])
-      if user
-        @race.user_races.new(user_id: user.id, race_id: @race.id)
+    if params["race"]["members"]
+      params["race"]["members"].each do |friend|
+        user = User.find_by(uid: friend["uid"])
+        if user
+          @race.user_races.new(user_id: user.id, race_id: @race.id)
+        end
       end
     end
     response = firebase.push("races", { name: race_params["name"] })
@@ -77,7 +79,7 @@ class API::RacesController < API::APIController
       milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id)
       response = milebase.push("milestones", { name: current_user.name, message: "left the race." })
 
-      Milestone.create(message: "left the race", name: current_user.name, race_name: @race.name)
+      Milestone.create(message: "left the race", name: current_user.name, race_name: race.name)
 
     end
     head 204
