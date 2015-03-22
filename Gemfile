@@ -16,6 +16,7 @@ gem 'omniauth'
 gem 'omniauth-facebook' # Facebook authentication
 gem "koala", "~> 1.10.0rc" # Facebook API
 gem "firebase"
+gem "parse-ruby-client"
 group :development do
   gem 'byebug'
   gem 'better_errors'
