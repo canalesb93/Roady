@@ -54,7 +54,7 @@ class API::RacesController < API::APIController
       end
     end
     userbase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id+"/users/")
-    response = userbase.set(current_user.uid, { lat: "0", lng: "0" })
+    response = userbase.set(current_user.uid, { name: current_user.name, lat: "25.649231099999998", lng: "-100.289689", distance: "140 m" })
     milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id)
     response = milebase.push("milestones", { name: current_user.name, message: "created the race." })
 
@@ -74,6 +74,19 @@ class API::RacesController < API::APIController
     else
       render json: @race.errors, status: 422
     end
+  end
+
+  def arrive
+    race = current_user.user_races.where(finished: false).first.try(:race)
+    race.users.each do |user|
+      if user != current_user
+        data = { alert: current_user.name.split[0...2].join(' ')+" reached the destination.", type: "announcement" }
+        push = Parse::Push.new(data, "userId-"+user.uid)
+        push.type = "ios"
+        push.save
+      end
+    end
+    head 204
   end
 
   def exit_race

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get 'users/current_race', to: 'users#current_race'
     post 'users/accept_race', to: 'users#accept_race'
     post 'races/exit_race', to: 'races#exit_race'
+    post 'races/arrive', to: 'races#arrive'
   end
   resources :users
 
