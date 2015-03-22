@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong id="race-name">Name:</strong>
   <%= @race.name %>
 </p>
 
@@ -16,6 +16,78 @@
     <%= render partial: "invite_form", locals: { user: user } %>
   <% end %>
 <% end %>
+
+<!-- Size of map div -->
+<style>
+    #map-canvas {
+        height: 500px;
+        width: 500px;
+        margin: 0px;
+        padding: 0px;
+    }
+</style>    
+
+<!-- Map div -->
+
+
+<!-- DMaps script -->
+<script type="text/javascript">
+  // ===================  FIREBASE  =========================
+  var ref = new Firebase("https://roady.firebaseio.com/races/<%= @race.map_id.to_s %>");
+  var usersRef = ref.child("users");
+  // usersRef.child("10153135068516147").set({
+  //   lat: "25.6492526",
+  //   lng: "-100.2896747"
+  // });
+  
+  ref.on("value", function(snapshot) {
+    // var changedPost = snapshot.val();
+    $("#name").html(snapshot.val());
+  });
+
+  // ========================  MAP  ============================
+  var destination = new google.maps.LatLng(<%= @race.lat %>, <%= @race.lng %>);
+  var map;
+  function initialize() {
+    var mapOptions = {
+      center: destination,
+      zoom: 14
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    var markers = {};
+
+    usersRef.on('value', function(dataSnapshot) {
+    // function will be called twice
+      dataSnapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        console.log("KEY: "+key);
+        console.log("LAT: "+childSnapshot.val().lat + " LNG: "+childSnapshot.val().lng);
+        markers[key] = new google.maps.Marker({
+          position: new google.maps.LatLng(childSnapshot.val().lat, childSnapshot.val().lng),
+          map: map,
+          icon: "http://graph.facebook.com/"+key+"/picture"
+        });
+        markers[key].setMap(map);
+      });
+    });
+    
+    var marker = new google.maps.Marker({
+      position: destination,
+      map: map,
+      title: "<%= @race.name %>"
+    });
+
+    marker.setMap(map);
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+
+  
+
+</script>
+<div id="map-canvas"></div>
 
 
 <%= link_to 'Edit', edit_race_path(@race) %> |
