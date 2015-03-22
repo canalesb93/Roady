@@ -32,7 +32,7 @@ class API::RacesController < API::APIController
 
   def create
     @race = Race.new(race_params)
-    @race.user_races.new(user_id: current_user.id, race_id: @race.id)
+    @race.user_races.new(user_id: current_user.id, race_id: @race.id, accepted: true)
     params["race"]["members"].each do |friend|
       user = User.find_by(uid: friend["uid"])
       if user
@@ -41,6 +41,8 @@ class API::RacesController < API::APIController
     end
     response = firebase.push("races", { name: race_params["name"] })
     @race.map_id = response.body["name"]
+    milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id+"/users/")
+    response = milebase.set(current_user.uid, { lat: "0", lng: "0" })
     if @race.save
       render json: @race, include: :users , status: :created, location: @race
     else
