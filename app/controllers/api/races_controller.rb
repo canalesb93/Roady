@@ -9,7 +9,6 @@ class API::RacesController < API::APIController
   end
 
   def show
-    @graph = Koala::Facebook::API.new(current_user.access_token)
     render json: @race, include: :users 
   end
 
@@ -35,7 +34,8 @@ class API::RacesController < API::APIController
   def create
     @race = Race.create(race_params)
     @race.user_races << UserRace.create(user_id: current_user.id, race_id: @race.id)
-
+    response = firebase.push("races", { :name => race_params["name"] })
+    @race.map_id = response.body["name"]
     if @race.save
       render json: @race, include: :users , status: :created, location: @race
     else

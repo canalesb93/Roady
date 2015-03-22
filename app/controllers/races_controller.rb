@@ -32,6 +32,8 @@ class RacesController < ApplicationController
   def create
     @race = Race.create(race_params)
     @race.user_races << UserRace.create(user_id: current_user.id, race_id: @race.id)
+    response = firebase.push("races", { :name => race_params["name"] })
+    @race.map_id = response.body["name"]
     @race.save
     respond_with(@race)
   end
