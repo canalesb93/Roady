@@ -4,7 +4,10 @@ class API::UsersController < API::APIController
     graph = Koala::Facebook::API.new(current_user.access_token)
     friends = []
     graph.get_connections("me", "friends").each do |friend|
-      friends << User.find_by(uid: friend["id"])
+      user = User.find_by(uid: friend["id"])
+      if user
+        friends << user 
+      end
     end
     render json: friends, status: :ok
   end
