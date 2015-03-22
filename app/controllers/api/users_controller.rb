@@ -13,7 +13,13 @@ class API::UsersController < API::APIController
   end
 
   def current_race
-    render json: current_user.user_races.where(finished: false).first.try(:race), include: :users
+    user_race = current_user.user_races.where(finished: false).first
+    race = user_race.try(:race)
+    if race
+      render json: { race: race, accepted: user_race.accepted }, include: :users
+    else
+      head 204
+    end
   end
 
   def accept_race
