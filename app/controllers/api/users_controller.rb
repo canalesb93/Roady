@@ -4,6 +4,7 @@ class API::UsersController < API::APIController
     graph = Koala::Facebook::API.new(current_user.access_token)
     friends = []
     graph.get_connections("me", "friends").each do |friend|
+      byebug
       user = User.find_by(uid: friend["id"])
       if user
         friends << user 
@@ -16,7 +17,7 @@ class API::UsersController < API::APIController
     user_race = current_user.user_races.where(finished: false).first
     race = user_race.try(:race)
     if race
-      render json: { race: race, accepted: user_race.accepted }, include: :users
+      render json: { race: race, accepted: user_race.accepted, admin_uid: current_user.uid }, include: :users
     else
       head 204
     end
