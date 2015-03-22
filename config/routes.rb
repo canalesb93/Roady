@@ -9,9 +9,11 @@ Rails.application.routes.draw do
   
   namespace :api do
     get 'races/feed', to: 'races#feed'
+    # get 'races/current_race_feed', to: 'races#current_race_feed'
     resources :races
     post 'races/:id/invite', to: 'races#invite_user'
     get 'users/friends', to: 'users#friends'
+    get 'users/buzz_race', to: 'users#buzz_race'
     get 'users/current_race', to: 'users#current_race'
     post 'users/accept_race', to: 'users#accept_race'
     post 'races/exit_race', to: 'races#exit_race'

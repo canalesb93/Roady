@@ -45,7 +45,7 @@ class API::RacesController < API::APIController
       params["race"]["members"].each do |friend|
         user = User.find_by(uid: friend["uid"])
         if user
-          data = { alert: current_user.name.split[0...2].join(' ')+" invited you to "+@race.name, admin: current_user.name.split[0...2].join(' '), race_name: @race.name, race: { map_id: @race.map_id, lat: @race.lat, lng: @race.lng } }
+          data = { alert: current_user.name.split[0...2].join(' ')+" invited you to "+@race.name, admin: current_user.name.split[0...2].join(' '), race_name: @race.name, race: { map_id: @race.map_id, lat: @race.lat, lng: @race.lng, type: "invitation" } }
           push = Parse::Push.new(data, "userId-"+user.uid)
           push.type = "ios"
           push.save
@@ -84,7 +84,6 @@ class API::RacesController < API::APIController
       response = milebase.push("milestones", { name: current_user.name, message: "left the race." })
 
       Milestone.create(message: "left the race", name: current_user.name, uid: current_user.uid, race_name: race.name)
-
     end
     head 204
   end
@@ -93,6 +92,14 @@ class API::RacesController < API::APIController
     @race.destroy
     head 204
   end
+
+  # def current_race_feed
+  #   race = current_user.user_races.where(finished: false).first.try(:race)
+  #   userbase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id, "GTxtTpOBxsVipwFroUQmMGCSxK7wYCBBGjAdAayn")
+  #   response = userbase.get("users")
+
+  #   render json: response
+  # end
 
   private
     def set_race

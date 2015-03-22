@@ -22,6 +22,19 @@ class API::UsersController < API::APIController
     end
   end
 
+  def buzz_race
+    race = current_user.user_races.where(finished: false).first.try(:race)
+    race.users.each do |user|
+      if user != current_user
+        data = { alert: current_user.name.split[0...2].join(' ')+" buzzed you.", type: "buzz" }
+        push = Parse::Push.new(data, "userId-"+user.uid)
+        push.type = "ios"
+        push.save
+      end
+    end
+    head 204
+  end
+
   def accept_race
     user_race = current_user.user_races.where(finished: false, accepted: false).first
     race = user_race.try(:race)
