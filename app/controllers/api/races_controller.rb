@@ -31,12 +31,12 @@ class API::RacesController < API::APIController
   end
 
   def create
-    @race = Race.create(race_params)
-    @race.user_races << UserRace.create(user_id: current_user.id, race_id: @race.id)
+    @race = Race.new(race_params)
+    @race.user_races.new(user_id: current_user.id, race_id: @race.id)
     params["race"]["members"].each do |friend|
       user = User.find_by(uid: friend["uid"])
       if user
-        @race.user_races << UserRace.create(user_id: user.id, race_id: @race.id)
+        @race.user_races.new(user_id: user.id, race_id: @race.id)
       end
     end
     response = firebase.push("races", { name: race_params["name"] })
