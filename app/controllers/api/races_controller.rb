@@ -37,13 +37,15 @@ class API::RacesController < API::APIController
 
   def create
     @race = Race.new(race_params)
-    @race.user_races.new(user_id: current_user.id, race_id: @race.id, accepted: true)
     @race.admin_name = current_user.name
+    response = firebase.push("races", { name: race_params["name"] })
+    @race.map_id = response.body["name"]
+    @race.user_races.new(user_id: current_user.id, race_id: @race.id, accepted: true)
     if params["race"]["members"]
       params["race"]["members"].each do |friend|
         user = User.find_by(uid: friend["uid"])
         if user
-          data = { :alert => current_user.name.split[0...2].join(' ')+" invited you to "+@race.name }
+          data = { alert: current_user.name.split[0...2].join(' ')+" invited you to "+@race.name, admin: current_user.name.split[0...2].join(' '), race_name: @race.name, race: { map_id: @race.map_id, lat: @race.lat, lng: @race.lng } }
           push = Parse::Push.new(data, "userId-"+user.uid)
           push.type = "ios"
           push.save
@@ -51,8 +53,6 @@ class API::RacesController < API::APIController
         end
       end
     end
-    response = firebase.push("races", { name: race_params["name"] })
-    @race.map_id = response.body["name"]
     userbase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id+"/users/")
     response = userbase.set(current_user.uid, { lat: "0", lng: "0" })
     milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id)
