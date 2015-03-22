@@ -42,8 +42,10 @@ class API::RacesController < API::APIController
     end
     response = firebase.push("races", { name: race_params["name"] })
     @race.map_id = response.body["name"]
-    milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id+"/users/")
-    response = milebase.set(current_user.uid, { lat: "0", lng: "0" })
+    userbase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id+"/users/")
+    response = userbase.set(current_user.uid, { lat: "0", lng: "0" })
+    milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+@race.map_id)
+    response = milebase.push("milestones", { name: current_user.name, message: "created the race." })
     if @race.save
       render json: @race, include: :users , status: :created, location: @race
     else
