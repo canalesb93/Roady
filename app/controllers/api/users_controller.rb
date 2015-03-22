@@ -12,4 +12,8 @@ class API::UsersController < API::APIController
     render json: friends, status: :ok
   end
 
+  def current_race
+    render json: current_user.races.where(finished: false).first
+  end
+
 end
