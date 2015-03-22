@@ -29,7 +29,7 @@ class API::UsersController < API::APIController
       milebase = Firebase::Client.new("https://roady.firebaseio.com/races/"+race.map_id)
       response = milebase.push("milestones", { name: current_user.name, message: "joined the race." })
 
-      Milestone.create(message: "joined the race", name: current_user.name, race_name: race.name)
+      Milestone.create(message: "joined the race", name: current_user.name, uid: current_user.uid, race_name: race.name)
 
     end
 

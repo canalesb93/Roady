@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150322093247) do
+ActiveRecord::Schema.define(version: 20150322120207) do
 
   create_table "milestones", force: true do |t|
     t.string   "message"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20150322093247) do
     t.string   "race_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "uid"
   end
 
   create_table "races", force: true do |t|
