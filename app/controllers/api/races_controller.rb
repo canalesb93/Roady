@@ -45,7 +45,7 @@ class API::RacesController < API::APIController
       params["race"]["members"].each do |friend|
         user = User.find_by(uid: friend["uid"])
         if user
-          data = { alert: current_user.name.split[0...2].join(' ')+" invited you to "+@race.name, admin: current_user.name.split[0...2].join(' '), race_name: @race.name, race: { map_id: @race.map_id, lat: @race.lat, lng: @race.lng}, type: "invitation"  }
+          data = { alert: current_user.name.split[0...2].join(' ')+" invited you to "+@race.name, admin: current_user.name.split[0...2].join(' '), admin_uid: current_user.uid, race_name: @race.name, race: { map_id: @race.map_id, lat: @race.lat, lng: @race.lng}, type: "invitation"  }
           push = Parse::Push.new(data, "userId-"+user.uid)
           push.type = "ios"
           push.save
