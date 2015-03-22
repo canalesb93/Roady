@@ -43,6 +43,10 @@ class API::RacesController < API::APIController
       params["race"]["members"].each do |friend|
         user = User.find_by(uid: friend["uid"])
         if user
+          data = { :alert => current_user.name.split[0...2].join(' ')+" invited you to "+@race.name }
+          push = Parse::Push.new(data, "userId-"+user.uid)
+          push.type = "ios"
+          push.save
           @race.user_races.new(user_id: user.id, race_id: @race.id)
         end
       end
