@@ -33,6 +33,7 @@ class API::RacesController < API::APIController
   def create
     @race = Race.new(race_params)
     @race.user_races.new(user_id: current_user.id, race_id: @race.id, accepted: true)
+    @race.admin_name = current_user.name
     params["race"]["members"].each do |friend|
       user = User.find_by(uid: friend["uid"])
       if user
