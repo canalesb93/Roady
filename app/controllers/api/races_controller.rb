@@ -15,8 +15,8 @@ class API::RacesController < API::APIController
   end
 
   def invite_user
-    # @user = User.find_for_facebook_oauth(request.env["omniauth.auth"])
-    # @race.user_races << UserRace.create(user_id: params[:user_id], race_id: @race.id)
+    @user = User.find_by(uid: params["id"])
+    @race.user_races << UserRace.create(user_id: @user.id, race_id: @race.id)
     @race.save
     if @race.save
       render json: @race, include: :users , status: :created, location: @race
